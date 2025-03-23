@@ -1,4 +1,3 @@
-# Import necessary libraries
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -23,13 +22,30 @@ st.sidebar.image("ahsankarya.png", use_container_width=True)
 st.sidebar.markdown("---")  # Garis pemisah
 st.sidebar.title("🤖 AI Structural Load Predictor")
 st.sidebar.write("### Information")
-st.sidebar.markdown("""
-<div style="text-align: justify;">
-✨ <b>AI Structural Load Predictor</b> adalah website canggih berbasis <i>machine learning</i> yang dirancang untuk menganalisis dan memprediksi beban maksimum yang dapat ditahan oleh suatu struktur. Dengan mempertimbangkan karakteristik material, dimensi, dan kondisi lingkungan, aplikasi ini membantu insinyur dan peneliti dalam perancangan dan analisis struktur yang lebih aman dan efisien.  
 
-🧠 Dibangun dengan <i>Python</i> dan didukung oleh <i>Neural Network (Deep Learning)</i>, website ini telah dilatih menggunakan dataset struktural untuk memberikan prediksi yang cepat, akurat, dan berbasis data nyata. Dengan kombinasi AI mutakhir dan visualisasi interaktif, <b>AI Structural Load Predictor</b> membawa inovasi baru dalam dunia teknik sipil dan rekayasa struktur.
-</div>
-""", unsafe_allow_html=True)
+# Pilihan Bahasa
+language = st.sidebar.radio("🌍 Select Language / Pilih Bahasa", ("English", "Bahasa Indonesia"))
+
+# Deskripsi berdasarkan bahasa yang dipilih
+if language == "English":
+    description = """
+    <div style="text-align: justify;">
+    ✨ <b>AI Structural Load Predictor</b> is an advanced <i>machine learning</i>-based application designed to analyze and predict the maximum load a structure can withstand. By considering <b>material characteristics, dimensions, and environmental conditions</b>, this application helps engineers and researchers in designing and analyzing <b>safer and more efficient structures</b>.  
+
+    🧠 Built with <i>Python</i> and powered by <i>Neural Networks (Deep Learning)</i>, this application has been trained using structural datasets to provide <b>fast, accurate, and data-driven predictions</b>. Combining <b>cutting-edge AI</b> with <b>interactive visualization</b>, <b>AI Structural Load Predictor</b> introduces a new era of innovation in civil engineering and structural analysis.
+    </div>
+    """
+else:
+    description = """
+    <div style="text-align: justify;">
+    ✨ <b>AI Structural Load Predictor</b> adalah aplikasi canggih berbasis <i>machine learning</i> yang dirancang untuk menganalisis dan memprediksi beban maksimum yang dapat ditahan oleh suatu struktur. Dengan mempertimbangkan <b>karakteristik material, dimensi, dan kondisi lingkungan</b>, aplikasi ini membantu insinyur dan peneliti dalam perancangan dan analisis struktur yang lebih <b>aman dan efisien</b>.  
+
+    🧠 Dibangun dengan <i>Python</i> dan didukung oleh <i>Neural Network (Deep Learning)</i>, aplikasi ini telah dilatih menggunakan dataset struktural untuk memberikan <b>prediksi yang cepat, akurat, dan berbasis data nyata</b>. Dengan kombinasi <b>AI mutakhir</b> dan <b>visualisasi interaktif</b>, <b>AI Structural Load Predictor</b> menghadirkan inovasi baru dalam dunia teknik sipil dan rekayasa struktur.
+    </div>
+    """
+
+# Menampilkan deskripsi di sidebar
+st.sidebar.markdown(description, unsafe_allow_html=True)
 
 # Developer Information
 st.sidebar.markdown("----")
@@ -37,7 +53,30 @@ st.sidebar.write("### 👨‍💻 Developer Information")
 st.sidebar.write("**Name:** Fathan Naufal Ahsan")
 st.sidebar.write("**Brand:** Ahsan Karya")
 st.sidebar.write("**Email:** [fathannaufalahsan.18@gmail.com](mailto:fathannaufalahsan.18@gmail.com)")
-st.sidebar.write("**Noted:** Jika terjadi error pada server silakan muat ulang halaman")
+
+# Pemisah
+st.sidebar.markdown("----")
+
+# Pilihan Bahasa dengan Unique Key
+language = st.sidebar.radio("🌍 Select Language / Pilih Bahasa", ("English", "Bahasa Indonesia"), key="language_selector")
+
+# Noted Section berdasarkan bahasa yang dipilih
+if language == "English":
+    note_text = """
+    **📝 Important Notes:**  
+    1️⃣ If a **server error** occurs, please **refresh the page**. 🔄  
+    2️⃣ The process may take **few seconds** as the system processes **dataset parameters**. Please be patient. ⏳  
+    """
+else:
+    note_text = """
+    **📝 Catatan Penting:**  
+    1️⃣ Jika terjadi **error pada server**, silakan **muat ulang halaman**. 🔄  
+    2️⃣ Proses memerlukan waktu **beberapa detik** karena sistem memproses **parameter dataset**. Harap bersabar. ⏳  
+    """
+# Menampilkan Noted Section
+st.sidebar.markdown(note_text)
+
+# Pemisah
 st.sidebar.markdown("----")
 
 # Sidebar Controls for Model Training
@@ -177,6 +216,7 @@ def generate_pdf(material_strength, elastic_modulus, height, width, thickness, t
     pdf.cell(200, 10, "AI Structural Load Prediction Report", ln=True, align='C')
     pdf.ln(10)
     pdf.cell(200, 10, "Developer: Fathan Naufal Ahsan", ln=True)
+    pdf.cell(200, 10, "Brand: Ahsan Karya", ln=True)
     pdf.cell(200, 10, "Email: fathannaufalahsan.18@gmail.com", ln=True)
     pdf.ln(10)
     pdf.cell(200, 10, f"Material Strength: {material_strength} MPa", ln=True)
@@ -193,7 +233,7 @@ def generate_pdf(material_strength, elastic_modulus, height, width, thickness, t
 
 # Main UI
 st.title("🤖 AI Structural Load Predictor")
-st.write("### Masukkan parameter struktur untuk memprediksi kapasitas beban maksimum.")
+st.write("### Enter the structural parameters to predict the maximum load capacity")
 
 col1, col2, col3 = st.columns(3)
 
