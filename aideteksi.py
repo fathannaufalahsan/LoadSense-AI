@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 # Streamlit Page Configuration
 st.set_page_config(page_title="AI Structural Load Predictor", layout="wide", page_icon="ahsankarya.ico")
-st.sidebar.image("ahsankarya.png", use_container_width=True)
+st.sidebar.image("ahsantech.png", use_container_width=True)
 st.sidebar.markdown("---")  # Garis pemisah
 st.sidebar.title("🤖 AI Structural Load Predictor")
 st.sidebar.write("### Information")
