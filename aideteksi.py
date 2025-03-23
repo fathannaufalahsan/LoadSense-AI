@@ -18,14 +18,14 @@ import logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Streamlit Page Configuration
-st.set_page_config(page_title="AI Structural Load Predictor", layout="wide", page_icon="🔧")
-st.sidebar.title("🔧 AI Structural Load Predictor")
+st.set_page_config(page_title="AI Structural Load Predictor", layout="wide", page_icon="ahsankarya.ico")
+st.sidebar.title("🤖 AI Structural Load Predictor")
 st.sidebar.write("### Information")
 st.sidebar.markdown("""
 <div style="text-align: justify;">
-✨ <b>AI Structural Load Predictor</b> adalah aplikasi canggih berbasis <i>machine learning</i> yang dirancang untuk menganalisis dan memprediksi beban maksimum yang dapat ditahan oleh suatu struktur. Dengan mempertimbangkan karakteristik material, dimensi, dan kondisi lingkungan, aplikasi ini membantu insinyur dan peneliti dalam perancangan dan analisis struktur yang lebih aman dan efisien.  
+✨ <b>AI Structural Load Predictor</b> adalah website canggih berbasis <i>machine learning</i> yang dirancang untuk menganalisis dan memprediksi beban maksimum yang dapat ditahan oleh suatu struktur. Dengan mempertimbangkan karakteristik material, dimensi, dan kondisi lingkungan, aplikasi ini membantu insinyur dan peneliti dalam perancangan dan analisis struktur yang lebih aman dan efisien.  
 
-🧠 Dibangun dengan <i>Python</i> dan didukung oleh <i>Neural Network (Deep Learning)</i>, aplikasi ini telah dilatih menggunakan dataset struktural untuk memberikan prediksi yang cepat, akurat, dan berbasis data nyata. Dengan kombinasi AI mutakhir dan visualisasi interaktif, <b>AI Structural Load Predictor</b> membawa inovasi baru dalam dunia teknik sipil dan rekayasa struktur.
+🧠 Dibangun dengan <i>Python</i> dan didukung oleh <i>Neural Network (Deep Learning)</i>, website ini telah dilatih menggunakan dataset struktural untuk memberikan prediksi yang cepat, akurat, dan berbasis data nyata. Dengan kombinasi AI mutakhir dan visualisasi interaktif, <b>AI Structural Load Predictor</b> membawa inovasi baru dalam dunia teknik sipil dan rekayasa struktur.
 </div>
 """, unsafe_allow_html=True)
 
@@ -41,7 +41,6 @@ st.sidebar.markdown("----")
 st.sidebar.write("### ⚙️ Model Parameters")
 epochs = st.sidebar.slider("Epochs", 10, 500, 100, step=10)
 batch_size = st.sidebar.slider("Batch Size", 16, 128, 32, step=16)
-
 
 # Load dataset (Dummy dataset, replace with real data in production)
 @st.cache_data
@@ -190,7 +189,7 @@ def generate_pdf(material_strength, elastic_modulus, height, width, thickness, t
 
 
 # Main UI
-st.title("🔧 AI Structural Load Predictor")
+st.title("🤖 AI Structural Load Predictor")
 st.write("### Masukkan parameter struktur untuk memprediksi kapasitas beban maksimum.")
 
 col1, col2, col3 = st.columns(3)
