@@ -213,7 +213,7 @@ def generate_pdf(material_strength, elastic_modulus, height, width, thickness, t
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
-    pdf.cell(200, 10, "AI Structural Load Prediction Report", ln=True, align='C')
+    pdf.cell(200, 10, "AI-Structural Load Prediction Report", ln=True, align='C')
     pdf.ln(10)
     pdf.cell(200, 10, "Developer: Fathan Naufal Ahsan", ln=True)
     pdf.cell(200, 10, "Brand: Ahsan Karya", ln=True)
@@ -232,7 +232,7 @@ def generate_pdf(material_strength, elastic_modulus, height, width, thickness, t
 
 
 # Main UI
-st.title("🤖 AI Structural Load Predictor")
+st.title("🤖 AI-Structural Load Predictor")
 st.write("### Enter the structural parameters to predict the maximum load capacity")
 
 col1, col2, col3 = st.columns(3)
