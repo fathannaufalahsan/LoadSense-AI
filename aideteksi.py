@@ -12,6 +12,9 @@ from fpdf import FPDF
 import shap
 import os
 import logging
+import streamlit as st
+import pygame
+import time
 
 # Logging Configuration
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -230,6 +233,16 @@ def generate_pdf(material_strength, elastic_modulus, height, width, thickness, t
     pdf.cell(200, 10, f"Predicted Maximum Load: {prediction:.2f} N", ln=True)
     pdf.output("prediction_report.pdf")
 
+# Initialize pygame mixer
+pygame.mixer.init()
+def play_welcome_audio():
+    try:
+        pygame.mixer.music.load("robot_voice.wav")
+        pygame.mixer.music.play()
+        time.sleep(3)  # Tunggu agar suara selesai diputar
+    except Exception as e:
+        st.error(f"Gagal memutar audio: {e}")
+
 # Main UI
 st.markdown(
     """
@@ -314,6 +327,14 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+# Play welcome audio when the app starts
+if 'audio_played' not in st.session_state:
+    st.session_state.audio_played = False
+
+if not st.session_state.audio_played:
+    play_welcome_audio()
+    st.session_state.audio_played = True
 
 # Layout Columns
 with st.container():
