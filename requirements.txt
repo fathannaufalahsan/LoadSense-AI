@@ -7,4 +7,3 @@ seaborn
 scikit-learn
 fpdf2
 shap
-pygame
