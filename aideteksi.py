@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 # Streamlit Page Configuration
 st.set_page_config(page_title="AI-Structural Load Predictor", layout="wide", page_icon="ahsankarya.ico")
 st.sidebar.image("ahsantech.png", use_container_width=True)
-st.sidebar.markdown("---")  # Garis pemisah
+st.sidebar.markdown("---")
 st.sidebar.title("🤖 AI-Structural Load Predictor")
 st.sidebar.write("### Information")
 
@@ -101,7 +101,7 @@ def generate_dummy_data():
         'thickness': np.random.uniform(0.01, 0.2, 1000),
         'temperature': np.random.uniform(-10, 50, 1000),
         'humidity': np.random.uniform(10, 90, 1000),
-        'max_load': np.random.uniform(1000, 10000, 1000)  # Target variable
+        'max_load': np.random.uniform(1000, 10000, 1000)
     })
     return data
 
@@ -141,7 +141,7 @@ if not os.path.exists(model_path):
         keras.layers.Dense(128, activation='relu'),
         keras.layers.Dropout(0.3),
         keras.layers.Dense(64, activation='relu'),
-        keras.layers.Dense(1)  # Output layer (predicted max load)
+        keras.layers.Dense(1)
     ])
 
     # Compile Model
@@ -230,42 +230,130 @@ def generate_pdf(material_strength, elastic_modulus, height, width, thickness, t
     pdf.cell(200, 10, f"Predicted Maximum Load: {prediction:.2f} N", ln=True)
     pdf.output("prediction_report.pdf")
 
-
 # Main UI
-st.title("🤖 AI-Structural Load Predictor")
-st.write("### Enter the structural parameters to predict the maximum load capacity")
+st.markdown(
+    """
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
 
-col1, col2, col3 = st.columns(3)
+        /* Warna latar belakang */
+        body {
+            background-color: #0d1117;
+            color: #ffffff;
+        }
 
-with col1:
-    material_strength = st.number_input("Material Strength (MPa)", 100, 500    , 250)
-    elastic_modulus = st.number_input("Elastic Modulus (MPa)", 20000, 200000, 100000)
+        /* Animasi Fade-in */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-with col2:
-    height = st.number_input("Height (m)", 0.1, 2.0, 1.0)
-    width = st.number_input("Width (m)", 0.1, 2.0, 1.0)
+        /* Animasi Glow */
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #33ccff, 0 0 10px #33ccff, 0 0 15px #33ccff; }
+            50% { text-shadow: 0 0 10px #00e6e6, 0 0 20px #00e6e6, 0 0 30px #00e6e6; }
+            100% { text-shadow: 0 0 5px #33ccff, 0 0 10px #33ccff, 0 0 15px #33ccff; }
+        }
 
-with col3:
-    thickness = st.number_input("Thickness (m)", 0.01, 0.2, 0.1)
-    temperature = st.number_input("Temperature (°C)", -10, 50, 20)
-    humidity = st.number_input("Humidity (%)", 10, 90, 50)
+        /* Judul */
+        .title {
+            text-align: center;
+            color: #33ccff;
+            font-size: 3rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            animation: fadeIn 2s ease-in-out, glow 3s infinite alternate;
+        }
 
-# Button for Prediction
-if st.button("🚀 Predict Load"):
-    with st.spinner("Making prediction..."):
+        /* Subtitle */
+        .subtitle {
+            text-align: center;
+            color: #00e6e6;
+            font-size: 1.2rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 400;
+            animation: fadeIn 3s ease-in-out;
+        }
+
+        /* Garis pemisah */
+        .separator {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #33ccff, #00e6e6);
+            margin: 20px auto;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        /* Tombol interaktif */
+        .ai-button {
+            display: block;
+            width: 250px;
+            margin: 30px auto;
+            padding: 15px;
+            text-align: center;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            background: linear-gradient(90deg, #33ccff, #00e6e6);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0 0 10px #00e6e6;
+        }
+
+        .ai-button:hover {
+            background: linear-gradient(90deg, #00e6e6, #33ccff);
+            box-shadow: 0 0 20px #00e6e6;
+        }
+    </style>
+
+    <h1 class="title">🤖 AI-Structural Load Predictor</h1>
+    <h4 class="subtitle">Predict the maximum load capacity with AI technology</h4>
+    <div class="separator"></div>
+    """,
+    unsafe_allow_html=True
+)
+
+# Layout Columns
+with st.container():
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.markdown('<div class="input-container">', unsafe_allow_html=True)
+        material_strength = st.number_input("🔩 Material Strength (MPa)", 100, 500, 250)
+        elastic_modulus = st.number_input("📏 Elastic Modulus (MPa)", 20000, 200000, 100000)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    with col2:
+        st.markdown('<div class="input-container">', unsafe_allow_html=True)
+        height = st.number_input("📐 Height (m)", 0.1, 2.0, 1.0)
+        width = st.number_input("📏 Width (m)", 0.1, 2.0, 1.0)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    with col3:
+        st.markdown('<div class="input-container">', unsafe_allow_html=True)
+        thickness = st.number_input("📏 Thickness (m)", 0.01, 0.2, 0.1)
+        temperature = st.number_input("🌡️ Temperature (°C)", -10, 50, 20)
+        humidity = st.number_input("💧 Humidity (%)", 10, 90, 50)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+if st.button("🚀 Predict Load", help="Click to predict the structural load capacity"):
+    with st.spinner("🔄 Processing... Please wait!"):
+        st.markdown('<div class="loading-icon"></div>', unsafe_allow_html=True)
         prediction = predict_load(material_strength, elastic_modulus, height, width, thickness, temperature, humidity)
 
     if prediction is not None:
-        st.success(f"Predicted Maximum Load: {prediction:.2f} N")
+        st.success(f"✅ Predicted Maximum Load: **{prediction:.2f} N**")
 
-        # SHAP Visualization
-        st.write("### Feature Contribution to Prediction")
+        # SHAP Feature Contribution
+        st.write("### 🔍 Feature Contribution to Prediction")
         fig, ax = plt.subplots(figsize=(8, 6))
         shap.summary_plot(shap_values, X_test, plot_type="bar", show=False)
         plt.tight_layout()
         st.pyplot(fig)
 
-        # Generate PDF Report
+        # Generate and Download PDF Report
         generate_pdf(material_strength, elastic_modulus, height, width, thickness, temperature, humidity, prediction)
         with open("prediction_report.pdf", "rb") as file:
             st.download_button(
@@ -275,4 +363,4 @@ if st.button("🚀 Predict Load"):
                 mime="application/pdf"
             )
     else:
-        st.error("Prediction failed. Please check the inputs or try again.")
+        st.error("❌ Prediction failed. Please check the inputs or try again.")
