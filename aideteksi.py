@@ -164,7 +164,6 @@ model = keras.models.load_model(model_path)
 explainer = shap.Explainer(model, X_test_scaled)
 shap_values = explainer(X_test_scaled)
 
-
 # Prediction Function
 def predict_load(material_strength, elastic_modulus, height, width, thickness, temperature, humidity):
     """
@@ -190,7 +189,6 @@ def predict_load(material_strength, elastic_modulus, height, width, thickness, t
     except Exception as e:
         logging.error(f"Prediction error: {str(e)}")
         return None
-
 
 # Generate PDF Report
 def generate_pdf(material_strength, elastic_modulus, height, width, thickness, temperature, humidity, prediction):
@@ -321,36 +319,48 @@ with st.container():
 
     with col1:
         st.markdown('<div class="input-container">', unsafe_allow_html=True)
-        material_strength = st.number_input("🔩 Material Strength (MPa)", 100, 500, 250)
-        elastic_modulus = st.number_input("📏 Elastic Modulus (MPa)", 20000, 200000, 100000)
+        material_strength = st.number_input("🔩 Material Strength (MPa)", 100, 500, 250, help="Enter material strength in MPa")
+        elastic_modulus = st.number_input("📏 Elastic Modulus (MPa)", 20000, 200000, 100000, help="Enter elastic modulus in MPa")
         st.markdown('</div>', unsafe_allow_html=True)
 
     with col2:
         st.markdown('<div class="input-container">', unsafe_allow_html=True)
-        height = st.number_input("📐 Height (m)", 0.1, 2.0, 1.0)
-        width = st.number_input("📏 Width (m)", 0.1, 2.0, 1.0)
+        height = st.number_input("📐 Height (m)", 0.1, 2.0, 1.0, help="Enter height in meters")
+        width = st.number_input("📏 Width (m)", 0.1, 2.0, 1.0, help="Enter width in meters")
         st.markdown('</div>', unsafe_allow_html=True)
 
     with col3:
         st.markdown('<div class="input-container">', unsafe_allow_html=True)
-        thickness = st.number_input("📏 Thickness (m)", 0.01, 0.2, 0.1)
-        temperature = st.number_input("🌡️ Temperature (°C)", -10, 50, 20)
-        humidity = st.number_input("💧 Humidity (%)", 10, 90, 50)
+        thickness = st.number_input("📏 Thickness (m)", 0.01, 0.2, 0.1, help="Enter thickness in meters")
+        temperature = st.number_input("🌡️ Temperature (°C)", -10, 50, 20, help="Enter temperature in °C")
+        humidity = st.number_input("💧 Humidity (%)", 10, 90, 50, help="Enter humidity as a percentage")
         st.markdown('</div>', unsafe_allow_html=True)
 
 if st.button("🚀 Predict Load", help="Click to predict the structural load capacity"):
     with st.spinner("🔄 Processing... Please wait!"):
-        st.markdown('<div class="loading-icon"></div>', unsafe_allow_html=True)
         prediction = predict_load(material_strength, elastic_modulus, height, width, thickness, temperature, humidity)
 
     if prediction is not None:
         st.success(f"✅ Predicted Maximum Load: **{prediction:.2f} N**")
 
+        # Model Performance Metrics
+        y_pred = model.predict(X_test_scaled)
+        mse = mean_squared_error(y_test, y_pred)
+        r2 = r2_score(y_test, y_pred)
+        st.write(f"### 📊 Model Performance Metrics")
+        st.write(f"- **Mean Squared Error (MSE):** {mse:.2f}")
+        st.write(f"- **R² Score:** {r2:.2f}")
+
         # SHAP Feature Contribution
         st.write("### 🔍 Feature Contribution to Prediction")
-        fig, ax = plt.subplots(figsize=(8, 6))
+        fig, ax = plt.subplots(figsize=(12, 8))
         shap.summary_plot(shap_values, X_test, plot_type="bar", show=False)
         plt.tight_layout()
+        st.pyplot(fig)
+
+        # SHAP Waterfall Plot
+        st.write("### 🔍 SHAP Waterfall Plot")
+        shap.plots.waterfall(shap_values[0])
         st.pyplot(fig)
 
         # Generate and Download PDF Report
