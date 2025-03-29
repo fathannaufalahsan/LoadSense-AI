@@ -299,6 +299,10 @@ st.markdown(
             transition: 0.3s ease-in-out;
             box-shadow: 0 0 10px #00e6e6;
         }
+        /* Sembunyikan logo */
+        .stApp .css-1d391kg {
+            display: none;
+        }
 
         .ai-button:hover {
             background: linear-gradient(90deg, #00e6e6, #33ccff);
