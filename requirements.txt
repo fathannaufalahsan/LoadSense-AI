@@ -7,7 +7,6 @@ streamlit
 matplotlib
 seaborn
 scikit-learn
-fpdf
+fpdf2
 shap
-os
 logging
