@@ -1,9 +1,13 @@
+datetime
 numpy
 pandas
+qrcode
 tensorflow
 streamlit
 matplotlib
 seaborn
 scikit-learn
-fpdf2
+fpdf
 shap
+os
+logging
