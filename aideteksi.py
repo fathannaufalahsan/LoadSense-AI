@@ -29,15 +29,34 @@ import streamlit as st
 # QR Code
 import qrcode
 
-
 # ========== MODERN LOGIN SYSTEM ==========
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+# Layout tergantung status login
+if st.session_state.authenticated:
+    st.set_page_config(
+        page_title="AI-Structural Load Predictor",
+        page_icon="ahsankarya.ico",
+        layout="wide",
+        initial_sidebar_state="expanded"
+    )
+else:
+    st.set_page_config(
+        page_title="Login",
+        page_icon="ahsankarya.ico",
+        layout="centered",
+        initial_sidebar_state="collapsed"
+    )
+
+# Fungsi untuk hashing password menggunakan SHA-256
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()
 
 # Dummy akun dengan password sudah di-hash
 accounts = {
     "admin": {"password": hash_password("admin123"), "role": "Admin"},
-    "demo": {"password": hash_password("demo"), "role": "User"},
+    "demo": {"password": hash_password("demo"), "role": "Demo"},
 }
 
 # Inisialisasi state
@@ -96,18 +115,6 @@ def login_ui():
         else:
             st.error("❌ Incorrect username or password.")
 
-
-def logout_ui():
-    if st.sidebar.button("🚪 Logout"):
-        st.session_state.authenticated = False
-        st.session_state.username = ""
-        st.session_state.role = ""
-        try:
-            st.rerun()
-        except AttributeError:
-            st.warning("🔄 Please refresh the page manually (F5).")
-            st.stop()
-
 # ✅ Login Gate
 if not st.session_state.authenticated:
     login_ui()
@@ -116,15 +123,28 @@ if not st.session_state.authenticated:
 
 # Logging Configuration
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
 # Streamlit Page Configuration
-st.set_page_config(page_title="AI-Structural Load Predictor", layout="wide", page_icon="ahsankarya.ico")
 st.sidebar.image("ahsantech.png", use_container_width=True)
 st.sidebar.markdown("---")
+
 # ✅ Show user login info
 st.sidebar.markdown("## 👤 Account Info")
 st.sidebar.info(f"Username: `{st.session_state.username}`")
 st.sidebar.info(f"Role: `{st.session_state.role}`")
+
+# --- Tombol Logout ---
+if st.sidebar.button("🚪 Logout"):
+    st.session_state.authenticated = False
+    st.session_state.username = ""
+    st.session_state.role = ""
+    try:
+        st.rerun()
+    except AttributeError:
+        st.warning("🔄 Please refresh manually (F5).")
+        st.stop()
 st.sidebar.markdown("---")
+
 # Sidebar Title
 st.sidebar.title("🤖 AI-Structural Load Predictor")
 st.sidebar.write("### Information")
