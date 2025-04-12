@@ -1,29 +1,134 @@
+# Standard Libraries
+import os
+import logging
+import hashlib
 from datetime import datetime
+
+# Data Processing
 import numpy as np
 import pandas as pd
-import qrcode
-import tensorflow as tf
-import streamlit as st
+
+# Visualization
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+# Machine Learning
+import tensorflow as tf
 from tensorflow import keras
+import shap
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
+
+# PDF Generation
 from fpdf import FPDF
-import shap
-import os
-import logging
+
+# Streamlit UI
+import streamlit as st
+
+# QR Code
+import qrcode
+
+
+# ========== MODERN LOGIN SYSTEM ==========
+def hash_password(password: str) -> str:
+    return hashlib.sha256(password.encode()).hexdigest()
+
+# Dummy akun dengan password sudah di-hash
+accounts = {
+    "admin": {"password": hash_password("admin123"), "role": "Admin"},
+    "demo": {"password": hash_password("demo"), "role": "User"},
+}
+
+# Inisialisasi state
+for key in ["authenticated", "username", "role", "show_password"]:
+    if key not in st.session_state:
+        st.session_state[key] = False if key == "authenticated" else ""
+
+def login_ui():
+    st.markdown("""
+        <style>
+            /* Animasi Glow */
+            @keyframes glow {
+                0% { text-shadow: 0 0 5px #33ccff, 0 0 10px #33ccff, 0 0 15px #33ccff; }
+                50% { text-shadow: 0 0 10px #00e6e6, 0 0 20px #00e6e6, 0 0 30px #00e6e6; }
+                100% { text-shadow: 0 0 5px #33ccff, 0 0 10px #33ccff, 0 0 15px #33ccff; }
+            }
+
+            h4 {
+                color: #00FFFF;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin-top: 0;
+                animation: glow 1.5s ease-in-out infinite;
+            }
+        </style>
+        <div style="text-align: center;">
+            <h2 style="color: #2196F3; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-bottom: 0.2em;">
+                🔐 Welcome Back!
+            </h2>
+            <h4>
+                🤖 AI-Structural Load Predictor
+            </h4>
+            <p style="color: #CCCCCC; font-size: 16px; font-style: italic;">
+                Please login using your credentials to access your dashboard 🚀
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+
+
+    with st.form("login_form", clear_on_submit=True):
+        username = st.text_input("👤 Username")
+        password = st.text_input("🔑 Password", type="password")
+        submitted = st.form_submit_button("🔓 Login")
+
+    if submitted:
+        if username in accounts and accounts[username]["password"] == hash_password(password):
+            st.session_state.authenticated = True
+            st.session_state.username = username
+            st.session_state.role = accounts[username]["role"]
+            st.success(f"✅ Welcome, {username}!")
+            st.balloons()
+            try:
+                st.rerun()
+            except AttributeError:
+                st.info("🔄 Please refresh manually (F5)")
+                st.stop()
+        else:
+            st.error("❌ Incorrect username or password.")
+
+
+def logout_ui():
+    if st.sidebar.button("🚪 Logout"):
+        st.session_state.authenticated = False
+        st.session_state.username = ""
+        st.session_state.role = ""
+        try:
+            st.rerun()
+        except AttributeError:
+            st.warning("🔄 Please refresh the page manually (F5).")
+            st.stop()
+
+# ✅ Login Gate
+if not st.session_state.authenticated:
+    login_ui()
+    st.stop()
+# ======== END LOGIN =========
 
 # Logging Configuration
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-
 # Streamlit Page Configuration
 st.set_page_config(page_title="AI-Structural Load Predictor", layout="wide", page_icon="ahsankarya.ico")
 st.sidebar.image("ahsantech.png", use_container_width=True)
 st.sidebar.markdown("---")
+# ✅ Show user login info
+st.sidebar.markdown("## 👤 Account Info")
+st.sidebar.info(f"Username: `{st.session_state.username}`")
+st.sidebar.info(f"Role: `{st.session_state.role}`")
+st.sidebar.markdown("---")
+# Sidebar Title
 st.sidebar.title("🤖 AI-Structural Load Predictor")
 st.sidebar.write("### Information")
+
 
 # Pilihan Bahasa
 language = st.sidebar.radio("🌍 Select Language / Pilih Bahasa", ("English", "Bahasa Indonesia"))
